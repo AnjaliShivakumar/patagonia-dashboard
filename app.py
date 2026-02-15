@@ -8,61 +8,66 @@ import numpy as np
 st.set_page_config(page_title="Patagonia BI: Return & Eco-Analytics", layout="wide")
 
 # --- CUSTOM CSS FOR DARK GREEN THEME & WHITE TEXT ---
+# --- CUSTOM CSS FOR THEME-PROOF DARK GREEN ---
 st.markdown("""
     <style>
-    /* Main background of the whole app */
-    .stApp { 
+    /* 1. Force the main background and sidebar */
+    .stApp, [data-testid="stSidebar"] {
         background-color: #023020 !important; /* Dark Forest Green */
-        color: white !important; 
     }
-    
-    /* Sidebar Background */
-    section[data-testid="stSidebar"] {
-        background-color: #011a12 !important; /* Slightly darker green for depth */
-    }
-    
-    /* Force all text in sidebar to white */
-    section[data-testid="stSidebar"] * {
+
+    /* 2. Force ALL text to be white */
+    h1, h2, h3, h4, h5, h6, p, label, span, div, li, .stMarkdown {
         color: white !important;
     }
 
-    /* Force all text (Headers, Markdown, Labels) to white */
-    h1, h2, h3, h4, h5, h6, p, label, span, .stMarkdown {
+    /* 3. FIX FOR 'WHITE ON WHITE': Force Input Widgets to have dark backgrounds */
+    /* This targets Selectboxes, Multi-selects, and Text Inputs */
+    div[data-baseweb="select"], div[data-baseweb="input"], .stSelectbox, .stMultiSelect {
+        background-color: #0e1117 !important; 
+        border-radius: 8px !important;
+    }
+    
+    /* Ensure text inside selectbox stays white */
+    div[data-baseweb="select"] * {
         color: white !important;
     }
 
-    /* Metric Card Styling (Black background as per previous theme) */
+    /* 4. Fix Sliders and Radio Buttons visibility */
+    .stSlider [data-testid="stMetricValue"] {
+        color: white !important;
+    }
+    div[data-testid="stThumbValue"] {
+        color: white !important;
+    }
+
+    /* 5. Metric Card Styling (Stay Black) */
     [data-testid="stMetric"] {
-        background-color: #0e1117 !important; /* Deep Black background */
+        background-color: #000000 !important; /* Pure Black */
         padding: 20px !important;
         border-radius: 15px !important;
         box-shadow: 0 4px 10px rgba(0,0,0,0.5) !important;
-        border: 1px solid #2E7D32 !important; /* Green border */
+        border: 1px solid #2E7D32 !important;
     }
     
-    /* Force Label (Text) Color to White */
-    [data-testid="stMetricLabel"] p {
-        color: #ffffff !important;
-        font-weight: bold !important;
-        font-size: 1.1rem !important;
-    }
-    
-    /* Force Value (Number) Color to Eco-Green */
-    [data-testid="stMetricValue"] div {
-        color: #4CAF50 !important; 
+    /* Label and Value colors for Metrics */
+    [data-testid="stMetricLabel"] p { color: #ffffff !important; }
+    [data-testid="stMetricValue"] div { color: #4CAF50 !important; }
+
+    /* 6. Tab Styling Fixes */
+    button[data-baseweb="tab"] { color: #888888 !important; } /* Inactive tabs */
+    button[data-baseweb="tab"][aria-selected="true"] {
+        color: white !important;
+        border-bottom-color: #4CAF50 !important;
     }
 
-    /* Styling for Tabs to ensure they are visible on dark green */
-    button[data-baseweb="tab"] {
-        color: white !important;
-    }
-    button[data-baseweb="tab"][aria-selected="true"] {
-        background-color: rgba(255, 255, 255, 0.1) !important;
-        border-bottom: 2px solid #4CAF50 !important;
+    /* 7. Plotly Chart Container Fix */
+    /* Forces the background of the chart containers to transparent to show the green */
+    .js-plotly-plot, .plot-container {
+        background-color: transparent !important;
     }
     </style>
     """, unsafe_allow_html=True)
-
 # --- LOAD & PREPROCESS ---
 @st.cache_data
 def load_data():
