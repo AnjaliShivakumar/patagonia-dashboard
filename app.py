@@ -9,7 +9,7 @@ st.set_page_config(page_title="Patagonia Return & Sustainability Insights", layo
 # --- DATA LOADING ---
 @st.cache_data
 def load_data():
-    df = pd.read_csv(r"C:\Users\Admin\Downloads\MA CIA 2\Patagonia_Order (1).csv")
+    df = pd.read_csv("Patagonia_Order (1).csv")
     df['Is_Returned'] = df['Return_Status'].apply(lambda x: 1 if x == 'Returned' else 0)
     # Estimate: 2kg CO2 per return logistics journey
     df['Return_Carbon_Waste'] = df['Is_Returned'] * 2.0 
