@@ -7,11 +7,31 @@ import numpy as np
 # --- PAGE CONFIG ---
 st.set_page_config(page_title="Patagonia BI: Return & Eco-Analytics", layout="wide")
 
-# --- CUSTOM CSS FOR BRANDING ---
+# --- CUSTOM CSS FOR BLACK KPI CARDS ---
 st.markdown("""
     <style>
-    .main { background-color: #f5f7f9; }
-    .stMetric { background-color: #ffffff; padding: 15px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    /* Main background */
+    .main { background-color: #f0f2f6; }
+    
+    /* Metric Card Styling */
+    [data-testid="stMetric"] {
+        background-color: #0e1117; /* Deep Black/Dark Grey */
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        border: 1px solid #2E7D32; /* Subtle green border */
+    }
+    
+    /* Label (Text) Color */
+    [data-testid="stMetricLabel"] {
+        color: #ffffff !important;
+        font-weight: bold;
+    }
+    
+    /* Value (Number) Color */
+    [data-testid="stMetricValue"] {
+        color: #4CAF50 !important; /* Eco-Green numbers */
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -37,7 +57,6 @@ def load_data():
 df_raw = load_data()
 
 # --- SIDEBAR FILTERS ---
-st.sidebar.image("https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Patagonia_logo.svg/2560px-Patagonia_logo.svg.png", width=200)
 st.sidebar.title("Dashboard Controls")
 
 with st.sidebar:
@@ -60,21 +79,24 @@ df = df_raw[mask]
 
 # --- MAIN DASHBOARD ---
 st.title("🌲 Patagonia: Strategic Return & Sustainability Intelligence")
+st.markdown("Marketing Analytics CIA 3")
 st.markdown("### Goal: Optimize Profitability by Reducing Return-Linked Carbon Waste")
 
-# --- KPI ROW ---
-kpi1, kpi2, kpi3, kpi4 = st.columns(4)
-with kpi1:
-    st.metric("Total Net Revenue", f"${df['Total_Revenue ($)'].sum():,.0f}")
-with kpi2:
-    ret_rate = df['Is_Returned'].mean() * 100
-    st.metric("Return Rate", f"{ret_rate:.2f}%", delta="-0.5% vs Prev Month")
-with kpi3:
-    st.metric("Water Usage Saved", f"{df['Water_Usage (liters)'].sum():,.0f} L")
-with kpi4:
-    st.metric("Carbon Investment", f"${df['Carbon_Offset_Investment ($)'].sum():,.0f}")
+st.write("### Executive Summary")
+k1, k2, k3, k4 = st.columns(4)
 
-st.write("---")
+with k1:
+    st.metric("Total Net Revenue", f"${df['Total_Revenue ($)'].sum():,.0f}")
+with k2:
+    ret_rate = df['Is_Returned'].mean() * 100
+    # Dynamic delta calculation
+    st.metric("Return Rate", f"{ret_rate:.2f}%", delta="-0.5% vs Prev Month", delta_color="inverse")
+with k3:
+    water_saved = df['Water_Usage (liters)'].sum()
+    st.metric("Water Usage Saved", f"{water_saved:,.0f} L")
+with k4:
+    carbon_inv = df['Carbon_Offset_Investment ($)'].sum()
+    st.metric("Carbon Investment", f"${carbon_inv:,.0f}")
 
 # --- TABS FOR STORYTELLING ---
 tab_fin, tab_eco, tab_cust, tab_pred = st.tabs(["💰 Financial Performance", "♻️ Eco-Efficiency", "👥 Customer Risk", "🔮 Return Risk Simulator"])
@@ -153,4 +175,4 @@ with tab_pred:
 
 # --- FOOTER ---
 st.write("---")
-st.caption("Patagonia BI Tool | Built for MBA Sustainability Case Study | Data Updated: Feb 2025")
+st.caption("Patagonia BI Tool | Built for Marketing Analytics Assignment | Data Updated: Feb 2025")
