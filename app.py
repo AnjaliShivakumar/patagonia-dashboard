@@ -7,20 +7,37 @@ import numpy as np
 # --- PAGE CONFIG ---
 st.set_page_config(page_title="Patagonia BI: Return & Eco-Analytics", layout="wide")
 
-# --- CUSTOM CSS FOR BLACK KPI CARDS (Fixed Syntax) ---
+# --- CUSTOM CSS FOR DARK GREEN THEME & WHITE TEXT ---
 st.markdown("""
     <style>
     /* Main background of the whole app */
-    .stApp { background-color: #f0f2f6; }
+    .stApp { 
+        background-color: #023020 !important; /* Dark Forest Green */
+        color: white !important; 
+    }
     
-    /* Metric Card Styling */
+    /* Sidebar Background */
+    section[data-testid="stSidebar"] {
+        background-color: #011a12 !important; /* Slightly darker green for depth */
+    }
+    
+    /* Force all text in sidebar to white */
+    section[data-testid="stSidebar"] * {
+        color: white !important;
+    }
+
+    /* Force all text (Headers, Markdown, Labels) to white */
+    h1, h2, h3, h4, h5, h6, p, label, span, .stMarkdown {
+        color: white !important;
+    }
+
+    /* Metric Card Styling (Black background as per previous theme) */
     [data-testid="stMetric"] {
         background-color: #0e1117 !important; /* Deep Black background */
         padding: 20px !important;
         border-radius: 15px !important;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3) !important;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.5) !important;
         border: 1px solid #2E7D32 !important; /* Green border */
-        color: white !important;
     }
     
     /* Force Label (Text) Color to White */
@@ -33,6 +50,15 @@ st.markdown("""
     /* Force Value (Number) Color to Eco-Green */
     [data-testid="stMetricValue"] div {
         color: #4CAF50 !important; 
+    }
+
+    /* Styling for Tabs to ensure they are visible on dark green */
+    button[data-baseweb="tab"] {
+        color: white !important;
+    }
+    button[data-baseweb="tab"][aria-selected="true"] {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        border-bottom: 2px solid #4CAF50 !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -70,7 +96,7 @@ with st.sidebar:
     
     # Multi-selects
     selected_mats = st.multiselect("Materials", options=df_raw['Material'].unique(), default=df_raw['Material'].unique())
-    selected_gender = st.radio("Gender Selection", options=["All", "Male", "Female"])
+    selected_gender = st.sidebar.radio("Gender Selection", options=["All", "Male", "Female"])
 
 # Filter Data Logic
 if len(date_range) == 2:
