@@ -8,7 +8,7 @@ import numpy as np
 st.set_page_config(page_title="Patagonia BI: Return & Eco-Analytics", layout="wide")
 
 # --- CUSTOM CSS FOR BLACK KPI CARDS ---
-st.markdown("""
+st.markdown(
     <style>
     /* Main background */
     .main { background-color: #f0f2f6; }
@@ -33,7 +33,7 @@ st.markdown("""
         color: #4CAF50 !important; /* Eco-Green numbers */
     }
     </style>
-    """, unsafe_allow_html=True)
+    , unsafe_allow_html=True)
 
 # --- LOAD & PREPROCESS ---
 @st.cache_data
