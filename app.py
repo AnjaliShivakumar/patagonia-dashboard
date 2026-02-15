@@ -8,45 +8,62 @@ import numpy as np
 st.set_page_config(page_title="Patagonia BI: Return & Eco-Analytics", layout="wide")
 
 # --- CUSTOM CSS: THEME-PROOF FOREST GREEN ---
+# --- THEME-LOCKED CSS: FIXING THE TOP HEADER ---
 st.markdown("""
     <style>
-    /* 1. Global Background & Text */
-    .stApp, [data-testid="stSidebar"] {
+    /* 1. Force Main App & Sidebar Backgrounds */
+    .stApp, [data-testid="stSidebar"], [data-testid="stSidebarContent"] {
         background-color: #023020 !important; /* Dark Forest Green */
     }
+
+    /* 2. FIX THE TOP HEADER (Share, Edit, etc.) */
+    header[data-testid="stHeader"] {
+        background-color: #023020 !important;
+        color: white !important;
+    }
     
-    /* Force ALL text to be white */
-    * {
+    /* Force the buttons in the top right to be white */
+    header[data-testid="stHeader"] button, header[data-testid="stHeader"] a {
         color: white !important;
     }
 
-    /* 2. Fix Input Widgets (Selectbox, Multi-select, Sliders) */
-    /* This prevents the "White on White" issue in Light Mode */
-    div[data-baseweb="select"], div[data-baseweb="input"], .stSelectbox, .stMultiSelect, div[role="listbox"] {
-        background-color: #0e1117 !important; /* Dark background for inputs */
+    /* 3. Fix the Sidebar internal containers */
+    section[data-testid="stSidebar"] > div {
+        background-color: #023020 !important;
+    }
+
+    /* 4. Force ALL text elements to be white */
+    h1, h2, h3, h4, h5, h6, p, label, span, .stMarkdown, [data-testid="stMetricLabel"] {
+        color: white !important;
+    }
+
+    /* 5. Fix Widgets (Selectboxes, Inputs) - Prevent 'White on White' */
+    div[data-baseweb="select"], div[data-baseweb="input"], .stSelectbox, .stMultiSelect {
+        background-color: #0e1117 !important; /* Dark grey-black for inputs */
         border: 1px solid #2E7D32 !important;
         border-radius: 8px !important;
     }
-
-    /* Target the text inside the selectboxes specifically */
-    div[data-baseweb="select"] span, div[data-baseweb="select"] div {
+    
+    /* Ensure text inside dropdowns/popovers is white */
+    div[data-baseweb="select"] *, div[data-baseweb="popover"] * {
         color: white !important;
     }
 
-    /* 3. Metric Card Styling (High Contrast) */
+    /* 6. Metric Card Styling (High Contrast Black) */
     [data-testid="stMetric"] {
         background-color: #000000 !important; /* Pure Black */
         padding: 20px !important;
         border-radius: 15px !important;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.5) !important;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.5) !important;
         border: 1px solid #2E7D32 !important;
     }
     
-    /* Metrics Label and Value colors */
-    [data-testid="stMetricLabel"] p { color: #ffffff !important; opacity: 0.9; }
-    [data-testid="stMetricValue"] div { color: #4CAF50 !important; }
+    [data-testid="stMetricValue"] div {
+        color: #4CAF50 !important; 
+        font-weight: bold !important;
+    }
 
-    /* 4. Tab Styling Fixes */
+    /* 7. Professional Tab Styling */
     button[data-baseweb="tab"] { 
         color: #888888 !important; 
         background-color: transparent !important;
@@ -54,12 +71,6 @@ st.markdown("""
     button[data-baseweb="tab"][aria-selected="true"] {
         color: white !important;
         border-bottom: 3px solid #4CAF50 !important;
-    }
-
-    /* 5. Sidebar Label Fix */
-    [data-testid="stSidebar"] label p {
-        color: white !important;
-        font-weight: bold !important;
     }
     </style>
     """, unsafe_allow_html=True)
